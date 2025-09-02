@@ -323,6 +323,10 @@ print(overall)
 
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
+### Attributions
+- [RF-DETR](https://github.com/roboflow/rf-detr) for the detector architecture and preprocessing transforms  
+- [ByteTrack](https://github.com/FoundationVision/ByteTrack) for multi-object tracking  
+
 ---
 
 ### Credit
