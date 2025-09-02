@@ -236,6 +236,55 @@ overall = pred.compute_overall_metrics()  # ADE, FDE, success_rate, heading/spee
 pertrk  = pred.get_track_data()           # list of per-track dicts
 ```
 
+Example for Webcam Usage:
+
+```python
+import cv2
+from detection import Detector
+from tracking import ObjectTracker
+from trajectory import TrajectoryPredictor
+
+# Initialize modules
+det = Detector("/abs/path/to/your.engine")
+tracker = ObjectTracker(track_thresh=0.5, match_thresh=0.8, track_buffer=30, frame_rate=30)
+pred = TrajectoryPredictor(future_frames=10, warmup_frames=10)
+
+cap = cv2.VideoCapture(0)  # 0 = default webcam
+frame_id = 0
+
+while cap.isOpened():
+    ret, frame = cap.read()
+    if not ret:
+        break
+
+    # Run detection
+    dets_xyxy, det_time = det.detect(frame)
+
+    # Run tracking
+    online_targets = tracker.update(dets_xyxy, frame.shape[:2][::-1])
+
+    # Prediction + evaluation
+    for t in online_targets:
+        info = tracker.get_track_info(t)
+        out = pred.predict(info['id'], info['center'], frame_id=frame_id)
+        pred.evaluate(info['id'], info['center'], frame_id=frame_id)
+
+    # Draw predictions if you want
+    # cv2.imshow("Live Tracking", frame)
+    # if cv2.waitKey(1) & 0xFF == ord('q'):
+    #     break
+
+    frame_id += 1
+
+cap.release()
+cv2.destroyAllWindows()
+
+# At the end: export metrics
+overall = pred.compute_overall_metrics()
+pertrk  = pred.get_track_data()
+print(overall)
+```
+
 ---
 
 ## Troubleshooting
