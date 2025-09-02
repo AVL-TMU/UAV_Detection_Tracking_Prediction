@@ -321,7 +321,7 @@ print(overall)
 
 ## License
 
-Add your preferred license here (MIT/BSD/GPL/Proprietary). If you’re publishing datasets or pretrained engines, state their licenses and any third-party attributions (RF-DETR, ByteTrack, etc.).
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
 ---
 
